@@ -1,14 +1,14 @@
 # Soccer Player Analysis Report
 
-Generated on: 2025-03-19 21:26:04
+Generated on: 2025-03-19 21:35:06
 
 ## Analysis Parameters
 
-- **min_shots**: 15
+- **min_shots**: 20
 - **top_n**: 20
 - **positions**: ['MF', 'FW, MF', 'MF,DF']
 - **min_90s**: 10
-- **max_age**: 25
+- **max_age**: 22
 
 
 ## Top Passers
@@ -77,18 +77,18 @@ Generated on: 2025-03-19 21:26:04
 
 ## Clinical Forwards
 
-| Player              | Squad           | Age    | Pos   |   efficiency_score |
-|:--------------------|:----------------|:-------|:------|-------------------:|
-| Patrik Schick       | Leverkusen      | 29-054 | FW    |           1.17439  |
-| Chris Wood          | Nott'ham Forest | 33-102 | FW    |           1.14552  |
-| Mika Biereth        | Monaco          | 22-039 | FW    |           1.12924  |
-| Ousmane Dembélé     | Paris S-G       | 27-308 | FW    |           1.10883  |
-| Mateo Retegui       | Atalanta        | 25-324 | FW    |           1.04544  |
-| Jonathan Burkardt   | Mainz 05        | 24-251 | FW    |           0.966545 |
-| Alexis Saelemaekers | Roma            | 25-265 | DF,FW |           0.934831 |
-| Steven Skrzybski    | Holstein Kiel   | 32-121 | FW,MF |           0.925952 |
-| Mohamed Salah       | Liverpool       | 32-277 | FW    |           0.903029 |
-| Myron Boadu         | Bochum          | 24-064 | FW    |           0.889877 |
+| Player            | Squad           | Age    | Pos   |   efficiency_score |
+|:------------------|:----------------|:-------|:------|-------------------:|
+| Patrik Schick     | Leverkusen      | 29-054 | FW    |           1.18665  |
+| Chris Wood        | Nott'ham Forest | 33-102 | FW    |           1.16545  |
+| Mika Biereth      | Monaco          | 22-039 | FW    |           1.1501   |
+| Ousmane Dembélé   | Paris S-G       | 27-308 | FW    |           1.11701  |
+| Mateo Retegui     | Atalanta        | 25-324 | FW    |           1.05529  |
+| Jonathan Burkardt | Mainz 05        | 24-251 | FW    |           0.984358 |
+| Mohamed Salah     | Liverpool       | 32-277 | FW    |           0.914238 |
+| Myron Boadu       | Bochum          | 24-064 | FW    |           0.910413 |
+| Harry Kane        | Bayern Munich   | 31-234 | FW    |           0.875574 |
+| Oihan Sancet      | Athletic Club   | 24-328 | MF    |           0.874552 |
 
 
 ## Progressive Midfielders

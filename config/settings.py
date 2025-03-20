@@ -15,6 +15,10 @@ DEFAULT_ANALYSIS_PARAMS = {
     "positions": ["MF", "FW, MF", "MF,DF"],
 }
 
+# Visualization settings
+VISUALIZATION_DIR = "visualizations"
+REPORTS_DIR = "reports"
+
 # Logging configuration
 LOGGING = {
     "level": os.getenv("LOG_LEVEL", "INFO"),
