@@ -1,6 +1,3 @@
-"""
-Database operations for the soccer analysis application.
-"""
 import pandas as pd
 import duckdb
 import uuid
