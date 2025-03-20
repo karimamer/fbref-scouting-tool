@@ -1,6 +1,3 @@
-"""
-Core metric calculation functions for player analysis.
-"""
 from typing import Dict, List, Optional, Union
 import pandas as pd
 import numpy as np

@@ -1,6 +1,3 @@
-"""
-Data loading functions for the soccer analysis application.
-"""
 from typing import Dict, List, Optional, Union
 import logging
 import pandas as pd

@@ -83,3 +83,60 @@
 2025-03-19 22:28:11,362 - soccer_analysis - INFO - Loading and processing data for advanced analysis
 2025-03-19 22:39:55,222 - soccer_analysis - INFO - Logging setup complete with level INFO
 2025-03-19 22:42:02,351 - soccer_analysis - INFO - Logging setup complete with level INFO
+2025-03-19 23:26:38,165 - soccer_analysis - INFO - Logging setup complete with level INFO
+2025-03-19 23:26:38,165 - soccer_analysis - INFO - Running shooting analysis
+2025-03-19 23:26:38,165 - soccer_analysis - INFO - Starting specialized shooting analysis
+2025-03-19 23:26:38,165 - soccer_analysis - INFO - Loading and processing data for shooting analysis
+2025-03-19 23:26:41,765 - soccer_analysis - INFO - shooting_stats shape: (1126, 33), columns: 33
+2025-03-19 23:26:41,765 - soccer_analysis - INFO - shot_creation_stats shape: (2752, 25), columns: 25
+2025-03-19 23:26:41,766 - soccer_analysis - INFO - possession_stats shape: (2752, 31), columns: 31
+2025-03-19 23:35:38,321 - soccer_analysis - INFO - Logging setup complete with level INFO
+2025-03-19 23:35:38,321 - soccer_analysis - INFO - Running shooting analysis
+2025-03-19 23:35:38,321 - soccer_analysis - INFO - Starting specialized shooting analysis
+2025-03-19 23:35:38,322 - soccer_analysis - INFO - Loading and processing data for shooting analysis
+2025-03-19 23:36:04,386 - soccer_analysis - INFO - Logging setup complete with level INFO
+2025-03-19 23:36:04,387 - soccer_analysis - INFO - Running shooting analysis
+2025-03-19 23:36:04,387 - soccer_analysis - INFO - Starting specialized shooting analysis
+2025-03-19 23:36:04,387 - soccer_analysis - INFO - Loading and processing data for shooting analysis
+2025-03-19 23:36:08,214 - soccer_analysis - INFO - shooting_stats shape: (1126, 33), columns: 33
+2025-03-19 23:36:08,214 - soccer_analysis - INFO - shot_creation_stats shape: (2752, 25), columns: 25
+2025-03-19 23:36:08,214 - soccer_analysis - INFO - possession_stats shape: (2752, 31), columns: 31
+2025-03-19 23:39:00,926 - soccer_analysis - INFO - Logging setup complete with level INFO
+2025-03-19 23:39:00,926 - soccer_analysis - INFO - Running shooting analysis
+2025-03-19 23:39:00,926 - soccer_analysis - INFO - Starting specialized shooting analysis
+2025-03-19 23:39:00,926 - soccer_analysis - INFO - Loading and processing data for shooting analysis
+2025-03-19 23:39:05,636 - soccer_analysis - INFO - shooting_stats shape: (1126, 33), columns: 33
+2025-03-19 23:39:05,637 - soccer_analysis - INFO - shot_creation_stats shape: (2752, 25), columns: 25
+2025-03-19 23:39:05,637 - soccer_analysis - INFO - possession_stats shape: (2752, 31), columns: 31
+2025-03-19 23:39:05,657 - soccer_analysis - INFO - Creating shooting visualizations
+2025-03-19 23:39:06,266 - soccer_analysis - INFO - Created 3 visualization files
+2025-03-19 23:39:06,266 - soccer_analysis - INFO - Saving shooting analysis results to database
+2025-03-19 23:39:06,271 - soccer_analysis - ERROR - Error saving results to database: Length of values (2) does not match length of index (20)
+2025-03-19 23:39:06,271 - soccer_analysis - INFO - Shooting analysis completed in 5.34 seconds
+2025-03-19 23:42:15,619 - soccer_analysis - INFO - Logging setup complete with level INFO
+2025-03-19 23:42:15,620 - soccer_analysis - INFO - Running shooting analysis
+2025-03-19 23:42:15,620 - soccer_analysis - INFO - Starting specialized shooting analysis
+2025-03-19 23:42:15,620 - soccer_analysis - INFO - Loading and processing data for shooting analysis
+2025-03-19 23:42:18,963 - soccer_analysis - INFO - shooting_stats shape: (1126, 33), columns: 33
+2025-03-19 23:42:18,963 - soccer_analysis - INFO - shot_creation_stats shape: (2752, 25), columns: 25
+2025-03-19 23:42:18,963 - soccer_analysis - INFO - possession_stats shape: (2752, 31), columns: 31
+2025-03-19 23:42:18,983 - soccer_analysis - INFO - Creating shooting visualizations
+2025-03-19 23:42:19,579 - soccer_analysis - INFO - Created 3 visualization files
+2025-03-19 23:42:19,579 - soccer_analysis - INFO - Saving shooting analysis results to database
+2025-03-19 23:42:19,583 - soccer_analysis - ERROR - Error saving results to database: Length of values (2) does not match length of index (20)
+2025-03-19 23:42:19,583 - soccer_analysis - INFO - Shooting analysis completed in 3.96 seconds
+2025-03-19 23:42:44,546 - soccer_analysis - INFO - Logging setup complete with level INFO
+2025-03-19 23:44:55,637 - soccer_analysis - INFO - Logging setup complete with level INFO
+2025-03-19 23:45:02,754 - soccer_analysis - INFO - Logging setup complete with level INFO
+2025-03-19 23:45:25,931 - soccer_analysis - INFO - Logging setup complete with level INFO
+2025-03-19 23:45:25,931 - soccer_analysis - INFO - Running shooting analysis
+2025-03-19 23:45:25,931 - soccer_analysis - INFO - Starting specialized shooting analysis
+2025-03-19 23:45:25,931 - soccer_analysis - INFO - Loading and processing data for shooting analysis
+2025-03-19 23:45:30,321 - soccer_analysis - INFO - shooting_stats shape: (1126, 33), columns: 33
+2025-03-19 23:45:30,321 - soccer_analysis - INFO - shot_creation_stats shape: (2752, 25), columns: 25
+2025-03-19 23:45:30,321 - soccer_analysis - INFO - possession_stats shape: (2752, 31), columns: 31
+2025-03-19 23:45:30,341 - soccer_analysis - INFO - Creating shooting visualizations
+2025-03-19 23:45:30,944 - soccer_analysis - INFO - Created 3 visualization files
+2025-03-19 23:45:30,944 - soccer_analysis - INFO - Saving shooting analysis results to database
+2025-03-19 23:45:30,949 - soccer_analysis - ERROR - Error saving results to database: Length of values (2) does not match length of index (20)
+2025-03-19 23:45:30,949 - soccer_analysis - INFO - Shooting analysis completed in 5.02 seconds

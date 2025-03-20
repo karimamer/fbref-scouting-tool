@@ -1,9 +1,3 @@
-"""
-Full analysis pipeline for soccer player scouting.
-
-This module provides a complete analysis pipeline to run a comprehensive
-player analysis, store results, and generate reports.
-"""
 import os
 import logging
 from datetime import datetime

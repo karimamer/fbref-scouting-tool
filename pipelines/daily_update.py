@@ -1,9 +1,3 @@
-"""
-Daily update pipeline for soccer player data.
-
-This module provides functionality to run regular updates of player data,
-keeping the database up to date with the latest available statistics.
-"""
 import os
 import logging
 import argparse

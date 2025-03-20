@@ -1,7 +1,3 @@
-"""
-Advanced player analysis pipeline that builds on basic analysis
-and provides enhanced metrics and visualizations.
-"""
 import os
 import logging
 from datetime import datetime

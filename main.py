@@ -1,8 +1,10 @@
 """
 Main entry point for the soccer analysis application.
+Updated with enhanced shooting analysis capabilities.
 """
 import argparse
 import logging
+import os
 from datetime import datetime
 from typing import Dict, List, Optional, Any
 
@@ -13,7 +15,9 @@ from src.data.loaders import DataLoader
 from src.data.processors import (
     process_passing_stats,
     process_shooting_stats,
-    process_defensive_stats
+    process_defensive_stats,
+    process_combined_shooting_data,  # Add the new processor
+    process_shot_quality             # Add the new processor
 )
 from src.analysis.basic.playmakers import identify_playmakers
 from src.analysis.basic.forwards import find_clinical_forwards
@@ -28,10 +32,22 @@ from src.analysis.advanced.versatility import calculate_versatility_score
 from src.analysis.advanced.progression import analyze_progressive_actions
 from src.analysis.advanced.possession_impact import get_expected_possession_impact
 from src.analysis.advanced.clustering import cluster_player_profiles, find_undervalued_players
+
+# Import new shooting analysis module
+from src.analysis.shooting_analyzer import (
+    analyze_shooting_efficiency,
+    analyze_shooting_profile,
+    identify_shot_creation_specialists,
+    calculate_finishing_skill_over_time,
+    analyze_shot_quality
+)
+
 from src.db.operations import DatabaseManager
 from src.utils.logging_setup import setup_logging, log_execution_time, log_data_stats
 from src.utils.visualization import create_dashboard
 
+# Import the new shooting visualizations
+from src.utils.shooting_visualizations import create_shooting_metrics_dashboard
 
 # Set up logging
 logger = setup_logging()
@@ -126,6 +142,29 @@ def analyze_players(
     results["complete_midfielders"] = find_complete_midfielders(
         passing_stats, possession_stats, defensive_stats
     ).head(top_n)
+
+    # Add new shooting analyses
+    results["shooting_efficiency"] = analyze_shooting_efficiency(
+        shooting_stats, min_shots=min_shots, min_90s=min_90s
+    ).head(top_n)
+
+    results["shooting_profiles"] = analyze_shooting_profile(
+        shooting_stats, min_shots=min_shots
+    ).head(top_n)
+
+    results["shot_quality"] = analyze_shot_quality(
+        shooting_stats, min_shots=min_shots
+    ).head(top_n)
+
+    results["finishing_skill"] = calculate_finishing_skill_over_time(
+        shooting_stats, min_90s=min_90s, min_shots=min_shots
+    ).head(top_n)
+
+    # Run combined shot creation and shooting analysis if available
+    if not shot_creation_stats.empty:
+        results["shot_creation_specialists"] = identify_shot_creation_specialists(
+            shooting_stats, shot_creation_stats, min_90s=min_90s
+        ).head(top_n)
 
     # Store analysis parameters
     results["parameters"] = pd.DataFrame([params])
@@ -288,6 +327,170 @@ def run_advanced_analysis(
     return results
 
 
+def run_shooting_analysis(
+    min_shots: int = DEFAULT_ANALYSIS_PARAMS["min_shots"],
+    top_n: int = DEFAULT_ANALYSIS_PARAMS["top_n"],
+    positions: List[str] = None,
+    min_90s: int = DEFAULT_ANALYSIS_PARAMS["min_90s"],
+    max_age: int = DEFAULT_ANALYSIS_PARAMS["max_age"],
+    force_reload: bool = False,
+    save_to_db: bool = True,
+    create_visualizations: bool = True,
+    output_dir: str = "visualizations/shooting"
+) -> Dict[str, pd.DataFrame]:
+    """
+    Run focused shooting analysis with enhanced metrics and visualizations.
+
+    Args:
+        min_shots: Minimum number of shots for analysis
+        top_n: Number of top players to return in each category
+        positions: List of positions to filter for
+        min_90s: Minimum number of 90-minute periods played
+        max_age: Maximum player age to include
+        force_reload: If True, reload data from source
+        save_to_db: If True, save results to database
+        create_visualizations: If True, generate visualization charts
+        output_dir: Directory to save visualization files
+
+    Returns:
+        Dictionary containing different shooting analysis results
+    """
+    logger.info("Starting specialized shooting analysis")
+    start_time = datetime.now()
+
+    # Use default positions if none provided
+    if positions is None:
+        positions = DEFAULT_ANALYSIS_PARAMS["positions"]
+        # Prioritize forward positions for shooting analysis
+        if any("FW" in pos for pos in positions):
+            positions = [pos for pos in positions if "FW" in pos] + ["FW"]
+
+    # Store parameters for logging and metadata
+    params = {
+        "min_shots": min_shots,
+        "top_n": top_n,
+        "positions": positions,
+        "min_90s": min_90s,
+        "max_age": max_age,
+        "analysis_type": "shooting",
+        "analysis_date": datetime.now().isoformat()
+    }
+
+    # Initialize data loader
+    data_loader = DataLoader(cache_enabled=True)
+
+    # Load and process data
+    logger.info("Loading and processing data for shooting analysis")
+    shooting_stats = process_shooting_stats(
+        data_loader.get_data("shooting", force_reload=force_reload),
+        min_shots=min_shots
+    )
+
+    # Load supporting data
+    try:
+        shot_creation_stats = data_loader.get_data("shot_creation", force_reload=force_reload)
+        possession_stats = data_loader.get_data("possession", force_reload=force_reload)
+    except Exception as e:
+        logger.warning(f"Could not load supporting data: {str(e)}")
+        shot_creation_stats = pd.DataFrame()
+        possession_stats = pd.DataFrame()
+
+    # Log data stats
+    log_data_stats(logger, shooting_stats, "shooting_stats")
+    log_data_stats(logger, shot_creation_stats, "shot_creation_stats")
+    log_data_stats(logger, possession_stats, "possession_stats")
+
+    # Filter by age
+    if max_age is not None and "Age" in shooting_stats.columns:
+        # Convert Age to numeric if needed
+        if not pd.api.types.is_numeric_dtype(shooting_stats["Age"]):
+            # Extract main age number before the dash
+            shooting_stats["Age_numeric"] = shooting_stats["Age"].str.split("-").str[0].astype(int)
+            shooting_stats = shooting_stats[shooting_stats["Age_numeric"] <= max_age].copy()
+        else:
+            shooting_stats = shooting_stats[shooting_stats["Age"] <= max_age].copy()
+
+    # Create combined shooting data
+    combined_shooting_data = process_combined_shooting_data(
+        shooting_stats,
+        shot_creation_stats,
+        possession_stats
+    )
+
+    # Calculate specialized shot quality metrics
+    shot_quality_data = process_shot_quality(shooting_stats)
+
+    # Initialize results dictionary
+    results = {}
+
+    # Run all shooting analyses
+
+    # 1. Standard efficiency analysis
+    results["clinical_forwards"] = find_clinical_forwards(
+        shooting_stats, min_shots=min_shots
+    ).head(top_n)
+
+    # 2. Enhanced shooting efficiency analysis
+    results["shooting_efficiency"] = analyze_shooting_efficiency(
+        shooting_stats, min_shots=min_shots, min_90s=min_90s
+    ).head(top_n)
+
+    # 3. Shooting profile categorization
+    results["shooting_profiles"] = analyze_shooting_profile(
+        shooting_stats, min_shots=min_shots
+    ).head(top_n)
+
+    # 4. Shot quality analysis
+    results["shot_quality"] = analyze_shot_quality(
+        shot_quality_data, min_shots=min_shots
+    ).head(top_n)
+
+    # 5. Finishing skill analysis
+    results["finishing_skill"] = calculate_finishing_skill_over_time(
+        shooting_stats, min_90s=min_90s, min_shots=min_shots
+    ).head(top_n)
+
+    # 6. Combined shot creation analysis if available
+    if not shot_creation_stats.empty:
+        results["shot_creation_specialists"] = identify_shot_creation_specialists(
+            shooting_stats, shot_creation_stats, min_90s=min_90s
+        ).head(top_n)
+
+    # Add the processed data for reference
+    results["combined_shooting_data"] = combined_shooting_data.head(top_n * 3)
+    results["shot_quality_data"] = shot_quality_data.head(top_n * 3)
+
+    # Add parameters to results
+    results["parameters"] = pd.DataFrame([params])
+
+    # Create visualizations if requested
+    if create_visualizations:
+        logger.info("Creating shooting visualizations")
+        try:
+            import os
+            os.makedirs(output_dir, exist_ok=True)
+
+            viz_files = create_shooting_metrics_dashboard(
+                shooting_stats,
+                output_dir=output_dir,
+                min_shots=min_shots,
+                min_90s=min_90s
+            )
+            logger.info(f"Created {len(viz_files)} visualization files")
+        except Exception as e:
+            logger.error(f"Error creating visualizations: {str(e)}")
+
+    # Save results to database if requested
+    if save_to_db:
+        logger.info("Saving shooting analysis results to database")
+        save_results_to_db(results, params, table_prefix="shooting_")
+
+    # Log execution time
+    log_execution_time(logger, start_time, "Shooting analysis")
+
+    return results
+
+
 def save_results_to_db(
     results: Dict[str, pd.DataFrame],
     metadata: Dict[str, Any],
@@ -318,11 +521,13 @@ def generate_analysis_report(results: Dict[str, pd.DataFrame], report_type="basi
 
     Args:
         results: Analysis results from analyze_players function
-        report_type: Type of report to generate (basic or advanced)
+        report_type: Type of report to generate (basic, advanced, or shooting)
 
     Returns:
         Formatted markdown report
     """
+    import os
+
     report = [f"# Soccer Player {report_type.title()} Analysis Report\n"]
     report.append(f"Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
 
@@ -357,8 +562,63 @@ def generate_analysis_report(results: Dict[str, pd.DataFrame], report_type="basi
                 # Convert to markdown table
                 report.append(df[display_cols].head(10).to_markdown(index=False))
                 report.append("\n")
-    else:
-        # Add each section to the report for advanced report
+
+    elif report_type == "shooting":
+        # Define sections for shooting report
+        sections = {
+            "clinical_forwards": "## Clinical Forwards\nForwards who excel at finishing their chances.",
+            "shooting_efficiency": "## Shooting Efficiency\nPlayers with the best overall shooting efficiency.",
+            "shooting_profiles": "## Shooting Profiles\nClassification of players based on their shooting patterns.",
+            "finishing_skill": "## Finishing Skill\nPlayers who consistently outperform their expected goals.",
+            "shot_quality": "## Shot Quality\nPlayers who take the highest quality shots.",
+            "shot_creation_specialists": "## Shot Creation Specialists\nPlayers who excel at both shooting and creating shots."
+        }
+
+        # Add each section to the report
+        for section_name, section_header in sections.items():
+            if section_name in results and not results[section_name].empty:
+                report.append(section_header)
+                report.append("\n")
+
+                # Select appropriate columns based on the section
+                if section_name == "clinical_forwards":
+                    display_cols = ["Player", "Squad", "Pos", "Age", "90s", "Gls", "Sh", "conversion_rate", "efficiency_score"]
+                elif section_name == "shooting_efficiency":
+                    display_cols = ["Player", "Squad", "Pos", "Age", "90s", "Gls", "Sh", "SoT%", "G/Sh", "shooting_efficiency_score"]
+                elif section_name == "shooting_profiles":
+                    display_cols = ["Player", "Squad", "Pos", "Age", "90s", "Sh", "SoT%", "Dist", "shooting_profile"]
+                elif section_name == "finishing_skill":
+                    display_cols = ["Player", "Squad", "Pos", "Age", "90s", "Gls", "xG", "np_goals_above_xG", "finishing_category"]
+                elif section_name == "shot_quality":
+                    display_cols = ["Player", "Squad", "Pos", "Age", "90s", "Sh", "npxG_per_shot", "shot_selection_category"]
+                elif section_name == "shot_creation_specialists":
+                    display_cols = ["Player", "Squad", "Pos", "Age", "90s", "Gls", "SCA90", "GCA90", "contribution_type", "shot_contribution_score"]
+                else:
+                    # Default columns
+                    display_cols = ["Player", "Squad", "Pos", "Age", "90s"]
+
+                # Only include columns that actually exist in the dataframe
+                cols_to_display = [col for col in display_cols if col in results[section_name].columns]
+                df_section = results[section_name][cols_to_display].head(10)
+
+                # Format the table
+                report.append(df_section.to_markdown(index=False, floatfmt=".2f"))
+                report.append("\n\n")
+
+        # Add visualization references if they exist
+        viz_dir = "visualizations/shooting"
+        if os.path.exists(viz_dir) and any(file.endswith(('.png', '.jpg')) for file in os.listdir(viz_dir)):
+            report.append("## Visualizations\n")
+            report.append("The following visualizations were generated as part of this analysis:\n")
+
+            viz_files = [f for f in os.listdir(viz_dir) if f.endswith(('.png', '.jpg'))]
+            for viz_file in viz_files:
+                report.append(f"- [{viz_file}]({os.path.join(viz_dir, viz_file)})")
+
+            report.append("\n")
+
+    else:  # Advanced report
+        # Add each section to the report
         sections = {
             "versatile_players": "## Most Versatile Players\nPlayers who excel across multiple skill areas (passing, possession, defense).",
             "overall_progressors": "## Top Overall Progressors\nPlayers who excel at moving the ball forward through carries, passes, and receiving.",
@@ -370,7 +630,6 @@ def generate_analysis_report(results: Dict[str, pd.DataFrame], report_type="basi
             "midfielder_clusters": "## Midfielder Profile Clusters\nGroups of midfielders with similar statistical profiles."
         }
 
-        # Add each section to the report
         for section_name, section_header in sections.items():
             if section_name in results and not results[section_name].empty:
                 report.append(section_header)
@@ -410,7 +669,7 @@ def parse_arguments():
 
     parser.add_argument(
         "--analysis-type",
-        choices=["basic", "advanced", "both"],
+        choices=["basic", "advanced", "shooting", "all"],
         default="basic",
         help="Type of analysis to run"
     )
@@ -485,7 +744,7 @@ if __name__ == "__main__":
 
     # Run basic analysis if requested
     basic_results = None
-    if args.analysis_type in ["basic", "both"]:
+    if args.analysis_type in ["basic", "all"]:
         logger.info("Running basic analysis")
         basic_results = analyze_players(**analysis_params)
 
@@ -504,7 +763,7 @@ if __name__ == "__main__":
 
     # Run advanced analysis if requested
     advanced_results = None
-    if args.analysis_type in ["advanced", "both"]:
+    if args.analysis_type in ["advanced", "all"]:
         logger.info("Running advanced analysis")
         advanced_results = run_advanced_analysis(
             **analysis_params,
@@ -524,14 +783,48 @@ if __name__ == "__main__":
             except Exception as e:
                 logger.error(f"Error saving advanced report to file: {str(e)}")
 
-    # Save combined report if both analysis types were run
-    if args.report_file and args.analysis_type == "both":
+    # Run shooting analysis if requested
+    shooting_results = None
+    if args.analysis_type in ["shooting", "all"]:
+        logger.info("Running shooting analysis")
+        shooting_results = run_shooting_analysis(
+            **analysis_params,
+            create_visualizations=not args.no_visualizations,
+            output_dir="visualizations/shooting"
+        )
+
+        # Generate and print shooting report
+        shooting_report = generate_analysis_report(shooting_results, report_type="shooting")
+        print(shooting_report)
+
+        # Save shooting report to file if specified
+        if args.report_file and args.analysis_type == "shooting":
+            try:
+                with open(args.report_file, 'w') as f:
+                    f.write(shooting_report)
+                logger.info(f"Shooting report saved to {args.report_file}")
+            except Exception as e:
+                logger.error(f"Error saving shooting report to file: {str(e)}")
+
+    # Save combined report if all analysis types were run
+    if args.report_file and args.analysis_type == "all":
         try:
             combined_report = "# Combined Soccer Analysis Report\n\n"
-            combined_report += "## Basic Analysis\n\n"
-            combined_report += generate_analysis_report(basic_results, report_type="basic")
-            combined_report += "\n\n## Advanced Analysis\n\n"
-            combined_report += generate_analysis_report(advanced_results, report_type="advanced")
+
+            if basic_results:
+                combined_report += "## Basic Analysis\n\n"
+                combined_report += generate_analysis_report(basic_results, report_type="basic")
+                combined_report += "\n\n"
+
+            if advanced_results:
+                combined_report += "## Advanced Analysis\n\n"
+                combined_report += generate_analysis_report(advanced_results, report_type="advanced")
+                combined_report += "\n\n"
+
+            if shooting_results:
+                combined_report += "## Shooting Analysis\n\n"
+                combined_report += generate_analysis_report(shooting_results, report_type="shooting")
+                combined_report += "\n\n"
 
             with open(args.report_file, 'w') as f:
                 f.write(combined_report)
