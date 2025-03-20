@@ -1,4 +1,5 @@
 import pandas as pd
+from config.settings import ANALYSIS_WEIGHTS, DEFAULT_ANALYSIS_PARAMS
 from src.analysis.metrics import (
     normalize_metric,
     calculate_per_90_metrics,
@@ -6,8 +7,7 @@ from src.analysis.metrics import (
     get_score_from_config
 )
 
-
-def get_expected_possession_impact(possession_df: pd.DataFrame, min_90s: float = 10.0) -> pd.DataFrame:
+def get_expected_possession_impact(possession_df: pd.DataFrame, min_90s: float = DEFAULT_ANALYSIS_PARAMS["min_90s"]) -> pd.DataFrame:
     """
     Calculate Expected Possession Impact (xPI) - a metric estimating a player's overall
     contribution to team possession.
@@ -53,21 +53,41 @@ def get_expected_possession_impact(possession_df: pd.DataFrame, min_90s: float =
         metrics.append("penalty_area_entries_90")
         poss["penalty_area_entries_90_norm"] = normalize_metric(poss["penalty_area_entries_90"])
 
-    # Weight components
-    weights = {
-        "touches_90_norm": 0.05,
-        "carries_90_norm": 0.10,
-        "succ_dribbles_90_norm": 0.15,
-        "prog_carries_90_norm": 0.20,
-        "final_third_entries_90_norm": 0.15,
-        "prog_receives_90_norm": 0.15,
-        "retention_ratio_norm": 0.20
-    }
+    # Weight components using config weights if available
+    # Try to map our metrics to the progressive metrics in the config
+    if "progressive" in ANALYSIS_WEIGHTS:
+        weights = {
+            "touches_90_norm": 0.05,  # Base weight
+            "carries_90_norm": 0.10,  # Base weight
+            "succ_dribbles_90_norm": 0.15,  # Base weight
+            "prog_carries_90_norm": ANALYSIS_WEIGHTS["progressive"].get("PrgC_norm", 0.20),
+            "final_third_entries_90_norm": ANALYSIS_WEIGHTS["progressive"].get("1/3_norm", 0.15),
+            "prog_receives_90_norm": ANALYSIS_WEIGHTS["progressive"].get("PrgR_norm", 0.15),
+            "retention_ratio_norm": 0.20  # Base weight
+        }
 
-    if "penalty_area_entries_90_norm" in poss.columns:
-        # Adjust weights to make room for penalty area entries
-        weights = {k: v * 0.85 for k, v in weights.items()}
-        weights["penalty_area_entries_90_norm"] = 0.15
+        if "penalty_area_entries_90_norm" in poss.columns:
+            weights["penalty_area_entries_90_norm"] = 0.15  # Additional weight
+
+            # Normalize weights to sum to 1
+            total_weight = sum(weights.values())
+            weights = {k: v/total_weight for k, v in weights.items()}
+    else:
+        # Default weights if config not available
+        weights = {
+            "touches_90_norm": 0.05,
+            "carries_90_norm": 0.10,
+            "succ_dribbles_90_norm": 0.15,
+            "prog_carries_90_norm": 0.20,
+            "final_third_entries_90_norm": 0.15,
+            "prog_receives_90_norm": 0.15,
+            "retention_ratio_norm": 0.20
+        }
+
+        if "penalty_area_entries_90_norm" in poss.columns:
+            # Adjust weights to make room for penalty area entries
+            weights = {k: v * 0.85 for k, v in weights.items()}
+            weights["penalty_area_entries_90_norm"] = 0.15
 
     # Calculate xPI
     poss["xPI"] = sum(

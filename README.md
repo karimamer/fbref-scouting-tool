@@ -121,7 +121,7 @@ Options:
 - `--top-n`: Number of top players to return (default: 20)
 - `--positions`: Positions to analyze (default: ["MF", "FW, MF", "MF,DF"])
 - `--min-90s`: Minimum 90-minute periods played (default: 5)
-- `--max-age`: Maximum player age (default: 30)
+- `--max-age`: Maximum player age to include (default: 30)
 - `--force-reload`: Force data reload from source
 - `--no-save`: Don't save to database
 - `--no-visualizations`: Skip creating visualizations for advanced analysis

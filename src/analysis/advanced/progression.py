@@ -1,6 +1,7 @@
 from typing import Dict
 import pandas as pd
 import numpy as np
+from config.settings import ANALYSIS_WEIGHTS, DEFAULT_ANALYSIS_PARAMS
 from src.analysis.metrics import (
     normalize_metric,
     calculate_per_90_metrics,
@@ -9,13 +10,11 @@ from src.analysis.metrics import (
 )
 
 
-
-
 def analyze_progressive_actions(
     possession_df: pd.DataFrame,
     passing_df: pd.DataFrame,
-    min_90s: float = 10.0,
-    top_n: int = 20
+    min_90s: float = DEFAULT_ANALYSIS_PARAMS["min_90s"],
+    top_n: int = DEFAULT_ANALYSIS_PARAMS["top_n"]
 ) -> Dict[str, pd.DataFrame]:
     """
     Comprehensive analysis of players' progressive actions.
@@ -61,13 +60,23 @@ def analyze_progressive_actions(
     )
 
     # Calculate composite scores
-    # Carrying progression score
-    carrying_weights = {
-        "PrgC_90": 0.4,
-        "PrgDist_90": 0.3,
-        "final_third_entries_90": 0.2,
-        "penalty_area_entries_90": 0.1
-    }
+    # Carrying progression score - use config weights if available
+    if "progressive" in ANALYSIS_WEIGHTS:
+        # Try to map our metrics to config
+        carrying_weights = {
+            "PrgC_90": ANALYSIS_WEIGHTS["progressive"].get("PrgC_norm", 0.40),
+            "PrgDist_90": ANALYSIS_WEIGHTS["progressive"].get("PrgDist_norm", 0.30),
+            "final_third_entries_90": ANALYSIS_WEIGHTS["progressive"].get("1/3_norm", 0.20),
+            "penalty_area_entries_90": 0.10  # Default weight
+        }
+    else:
+        # Default weights if config not available
+        carrying_weights = {
+            "PrgC_90": 0.40,
+            "PrgDist_90": 0.30,
+            "final_third_entries_90": 0.20,
+            "penalty_area_entries_90": 0.10
+        }
 
     for col in carrying_weights:
         if col in progression.columns:
@@ -89,11 +98,34 @@ def analyze_progressive_actions(
     progression["progressive_receives_90_norm"] = normalize_metric(progression["progressive_receives_90"])
     progression["receiving_progression_score"] = progression["progressive_receives_90_norm"]
 
-    # Overall progression score
-    progression["total_progression_score"] = (
-        progression["carrying_progression_score"] * 0.4 +
-        progression["passing_progression_score"] * 0.4 +
-        progression["receiving_progression_score"] * 0.2
+    # Overall progression score with config weights if available
+    # Attempt to create composite weights by combining playmaker and progressive configs
+    overall_weights = {}
+
+    if "progressive" in ANALYSIS_WEIGHTS and "playmaker" in ANALYSIS_WEIGHTS:
+        # Progressive weights for carrying
+        carrying_weight = sum(ANALYSIS_WEIGHTS["progressive"].get(k, 0) for k in ["PrgC_norm", "PrgDist_norm", "1/3_norm"]) / 3
+        # Playmaker weights for passing
+        passing_weight = ANALYSIS_WEIGHTS["playmaker"].get("PrgP_90_norm", 0.35)
+        # Progressive weights for receiving
+        receiving_weight = ANALYSIS_WEIGHTS["progressive"].get("PrgR_norm", 0.15)
+
+        total_weight = carrying_weight + passing_weight + receiving_weight
+        overall_weights = {
+            "carrying_progression_score": carrying_weight / total_weight,
+            "passing_progression_score": passing_weight / total_weight,
+            "receiving_progression_score": receiving_weight / total_weight
+        }
+    else:
+        overall_weights = {
+            "carrying_progression_score": 0.4,
+            "passing_progression_score": 0.4,
+            "receiving_progression_score": 0.2
+        }
+
+    progression["total_progression_score"] = sum(
+        progression[component] * weight
+        for component, weight in overall_weights.items()
     )
 
     # Identify specialists and all-rounders
