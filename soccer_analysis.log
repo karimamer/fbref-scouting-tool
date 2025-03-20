@@ -1,0 +1,39 @@
+2025-03-19 21:24:21,419 - soccer_analysis - INFO - Logging setup complete with level INFO
+2025-03-19 21:24:21,419 - soccer_analysis - INFO - Starting player analysis
+2025-03-19 21:24:21,419 - soccer_analysis - INFO - Loading and processing data
+2025-03-19 21:24:28,950 - soccer_analysis - INFO - passing_stats shape: (2752, 32), columns: 32
+2025-03-19 21:24:28,950 - soccer_analysis - INFO - shooting_stats shape: (232, 26), columns: 26
+2025-03-19 21:24:28,950 - soccer_analysis - INFO - possession_stats shape: (2752, 31), columns: 31
+2025-03-19 21:24:28,950 - soccer_analysis - INFO - defensive_stats shape: (1353, 25), columns: 25
+2025-03-19 21:24:28,950 - soccer_analysis - INFO - shot_creation_stats shape: (2752, 25), columns: 25
+2025-03-19 21:24:28,950 - soccer_analysis - INFO - Running player analyses
+2025-03-19 21:24:28,978 - soccer_analysis - INFO - Saving results to database
+2025-03-19 21:24:28,985 - soccer_analysis - ERROR - Error saving results to database: Length of values (3) does not match length of index (20)
+2025-03-19 21:24:28,985 - soccer_analysis - INFO - Player analysis completed in 7.57 seconds
+2025-03-19 21:24:57,415 - soccer_analysis - INFO - Logging setup complete with level INFO
+2025-03-19 21:25:13,569 - soccer_analysis - INFO - Logging setup complete with level INFO
+2025-03-19 21:25:13,570 - soccer_analysis - INFO - Starting player analysis
+2025-03-19 21:25:13,570 - soccer_analysis - INFO - Loading and processing data
+2025-03-19 21:25:20,803 - soccer_analysis - INFO - passing_stats shape: (2752, 32), columns: 32
+2025-03-19 21:25:20,803 - soccer_analysis - INFO - shooting_stats shape: (232, 26), columns: 26
+2025-03-19 21:25:20,803 - soccer_analysis - INFO - possession_stats shape: (2752, 31), columns: 31
+2025-03-19 21:25:20,803 - soccer_analysis - INFO - defensive_stats shape: (1353, 25), columns: 25
+2025-03-19 21:25:20,803 - soccer_analysis - INFO - shot_creation_stats shape: (2752, 25), columns: 25
+2025-03-19 21:25:20,803 - soccer_analysis - INFO - Running player analyses
+2025-03-19 21:25:20,830 - soccer_analysis - INFO - Saving results to database
+2025-03-19 21:25:20,835 - soccer_analysis - ERROR - Error saving results to database: Length of values (2) does not match length of index (20)
+2025-03-19 21:25:20,835 - soccer_analysis - INFO - Player analysis completed in 7.27 seconds
+2025-03-19 21:25:20,842 - soccer_analysis - INFO - Report saved to report.md
+2025-03-19 21:25:58,803 - soccer_analysis - INFO - Logging setup complete with level INFO
+2025-03-19 21:25:58,803 - soccer_analysis - INFO - Starting player analysis
+2025-03-19 21:25:58,803 - soccer_analysis - INFO - Loading and processing data
+2025-03-19 21:26:04,368 - soccer_analysis - INFO - passing_stats shape: (2752, 32), columns: 32
+2025-03-19 21:26:04,368 - soccer_analysis - INFO - shooting_stats shape: (232, 26), columns: 26
+2025-03-19 21:26:04,368 - soccer_analysis - INFO - possession_stats shape: (2752, 31), columns: 31
+2025-03-19 21:26:04,368 - soccer_analysis - INFO - defensive_stats shape: (1353, 25), columns: 25
+2025-03-19 21:26:04,369 - soccer_analysis - INFO - shot_creation_stats shape: (2752, 25), columns: 25
+2025-03-19 21:26:04,369 - soccer_analysis - INFO - Running player analyses
+2025-03-19 21:26:04,396 - soccer_analysis - INFO - Saving results to database
+2025-03-19 21:26:04,401 - soccer_analysis - ERROR - Error saving results to database: Length of values (3) does not match length of index (20)
+2025-03-19 21:26:04,401 - soccer_analysis - INFO - Player analysis completed in 5.60 seconds
+2025-03-19 21:26:04,408 - soccer_analysis - INFO - Report saved to report.md
