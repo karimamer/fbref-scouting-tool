@@ -15,6 +15,10 @@ DEFAULT_ANALYSIS_PARAMS = {
     "positions": ["MF", "FW, MF", "MF,DF"],
 }
 
+# Visualization settings
+VISUALIZATION_DIR = "visualizations"
+REPORTS_DIR = "reports"
+
 # Logging configuration
 LOGGING = {
     "level": os.getenv("LOG_LEVEL", "INFO"),
@@ -74,5 +78,41 @@ ANALYSIS_WEIGHTS = {
         "progression_score_norm": 0.40,
         "pressing_score_norm": 0.30,
         "playmaker_score_norm": 0.30,
+    }
+}
+
+ANALYSIS_WEIGHTS.update({
+    # Add weights for versatility analysis
+    "versatility": {
+        "passing_component": 0.30,
+        "possession_component": 0.30,
+        "defensive_component": 0.30,
+        "shooting_component": 0.10
+    },
+
+    # Add weights for possession impact analysis
+    "possession_impact": {
+        "touches_weight": 0.05,
+        "carries_weight": 0.10,
+        "dribbles_weight": 0.15,
+        "progression_weight": 0.40,
+        "retention_weight": 0.30
+    },
+
+    # Add weights for progression analysis components
+    "progression_components": {
+        "carrying_weight": 0.40,
+        "passing_weight": 0.40,
+        "receiving_weight": 0.20
+    }
+})
+
+# Add specific parameters for advanced analysis
+ADVANCED_ANALYSIS_PARAMS = {
+    "visualization_dir": VISUALIZATION_DIR,
+    "cluster_count": 5,  # Number of clusters for player clustering
+    "value_analysis": {
+        "age_penalty_factor": 0.3,  # Penalty factor for older players in value analysis
+        "bargain_threshold": 0.90  # Percentile threshold to identify bargain players
     }
 }
