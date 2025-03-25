@@ -24,14 +24,16 @@ from src.analysis.advanced.clustering import cluster_player_profiles, find_under
 from src.db.operations import DatabaseManager
 from src.utils.logging_setup import setup_logging, log_execution_time, log_data_stats
 from src.utils.visualization import create_dashboard
+from src.utils.pipeline_helpers import filter_by_age
 
 # Set up logging
 logger = logging.getLogger(__name__)
 
+
 def run_advanced_analysis(
     min_shots: int = DEFAULT_ANALYSIS_PARAMS["min_shots"],
     top_n: int = DEFAULT_ANALYSIS_PARAMS["top_n"],
-    positions: List[str] = None,
+    positions: List[str] = DEFAULT_ANALYSIS_PARAMS["positions"],
     min_90s: int = DEFAULT_ANALYSIS_PARAMS["min_90s"],
     max_age: int = DEFAULT_ANALYSIS_PARAMS["max_age"],
     force_reload: bool = False,
@@ -61,9 +63,6 @@ def run_advanced_analysis(
     logger.info("Starting advanced player analysis")
     start_time = datetime.now()
 
-    # Use default positions if none provided
-    if positions is None:
-        positions = DEFAULT_ANALYSIS_PARAMS["positions"]
 
     # Store parameters for logging and metadata
     params = {
@@ -98,44 +97,15 @@ def run_advanced_analysis(
     log_data_stats(logger, possession_stats, "possession_stats")
     log_data_stats(logger, defensive_stats, "defensive_stats")
 
-    # Filter by age - properly handle Age column format
+
+# Filter by age if max_age is specified
     if max_age is not None:
-        # Convert Age to numeric - handle format like "30-039" or "29-226"
         logger.info(f"Filtering players by age (max_age={max_age})")
 
-        # Handle passing stats age
-        if "Age" in passing_stats.columns:
-            # Check if Age is already numeric
-            if not pd.api.types.is_numeric_dtype(passing_stats["Age"]):
-                # Extract main age number before the dash
-                passing_stats["Age_numeric"] = passing_stats["Age"].str.split("-").str[0].astype(int)
-                passing_stats = passing_stats[passing_stats["Age_numeric"] <= max_age].copy()
-            else:
-                passing_stats = passing_stats[passing_stats["Age"] <= max_age].copy()
-
-        # Handle possession stats age
-        if "Age" in possession_stats.columns:
-            if not pd.api.types.is_numeric_dtype(possession_stats["Age"]):
-                possession_stats["Age_numeric"] = possession_stats["Age"].str.split("-").str[0].astype(int)
-                possession_stats = possession_stats[possession_stats["Age_numeric"] <= max_age].copy()
-            else:
-                possession_stats = possession_stats[possession_stats["Age"] <= max_age].copy()
-
-        # Handle defensive stats age
-        if "Age" in defensive_stats.columns:
-            if not pd.api.types.is_numeric_dtype(defensive_stats["Age"]):
-                defensive_stats["Age_numeric"] = defensive_stats["Age"].str.split("-").str[0].astype(int)
-                defensive_stats = defensive_stats[defensive_stats["Age_numeric"] <= max_age].copy()
-            else:
-                defensive_stats = defensive_stats[defensive_stats["Age"] <= max_age].copy()
-
-        # Handle shooting stats age
-        if "Age" in shooting_stats.columns:
-            if not pd.api.types.is_numeric_dtype(shooting_stats["Age"]):
-                shooting_stats["Age_numeric"] = shooting_stats["Age"].str.split("-").str[0].astype(int)
-                shooting_stats = shooting_stats[shooting_stats["Age_numeric"] <= max_age].copy()
-            else:
-                shooting_stats = shooting_stats[shooting_stats["Age"] <= max_age].copy()
+        passing_stats = filter_by_age(passing_stats, max_age)
+        possession_stats = filter_by_age(possession_stats, max_age)
+        defensive_stats = filter_by_age(defensive_stats, max_age)
+        shooting_stats = filter_by_age(shooting_stats, max_age)
 
     results = {}
 

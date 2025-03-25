@@ -1,156 +1,165 @@
-# Soccer Player Analysis Report
+# Soccer Player Advanced Analysis Report
 
-Generated on: 2025-03-19 21:35:06
+Generated on: 2025-03-23 09:25:09
 
 ## Analysis Parameters
 
 - **min_shots**: 20
 - **top_n**: 20
-- **positions**: ['MF', 'FW, MF', 'MF,DF']
-- **min_90s**: 10
-- **max_age**: 22
+- **positions**: ['MF', 'MF,DF']
+- **min_90s**: 5
+- **max_age**: 23
+- **analysis_type**: advanced
 
 
-## Top Passers
-
-| Player            | Squad       | Age    | Pos   |
-|:------------------|:------------|:-------|:------|
-| Ronnie Edwards    | Southampton | 21-356 | DF    |
-| Chiquinho         | Wolves      | 25-042 | MF    |
-| Mathéo Bodmer     | Le Havre    | 20-317 | MF    |
-| Chema             | Real Madrid | 19-328 | MF    |
-| Jeremy Sarmiento  | Brighton    | 22-276 | MF    |
-| Lorenzo Tosto     | Empoli      | 19-049 | DF    |
-| Naatan Skyttä     | Toulouse    | 22-316 | FW    |
-| Gianluca Scamacca | Atalanta    | 26-077 | FW    |
-| Nunzio Lella      | Venezia     | 24-234 | MF    |
-| Ike Orazi         | Reims       | 17-281 | MF    |
+## Most Versatile Players
+Players who excel across multiple skill areas (passing, possession, defense).
 
 
-## Top Shooters
-
-| Player             | Squad           | Age    | Pos   |
-|:-------------------|:----------------|:-------|:------|
-| Robert Lewandowski | Barcelona       | 36-210 | FW    |
-| Erling Haaland     | Manchester City | 24-241 | FW    |
-| Hugo Ekitike       | Eint Frankfurt  | 22-272 | FW    |
-| Mohamed Salah      | Liverpool       | 32-277 | FW    |
-| Serhou Guirassy    | Dortmund        | 29-007 | FW    |
-| Alexander Isak     | Newcastle Utd   | 25-179 | FW    |
-| Ousmane Dembélé    | Paris S-G       | 27-308 | FW    |
-| Emanuel Emegha     | Strasbourg      | 22-044 | FW    |
-| Raphinha           | Barcelona       | 28-095 | FW,MF |
-| Yoane Wissa        | Brentford       | 28-197 | FW    |
+| Player               | Squad          | Pos   | Age    |   90s |   passing_score |   possession_score |   defensive_score |   adjusted_versatility |
+|:---------------------|:---------------|:------|:-------|------:|----------------:|-------------------:|------------------:|-----------------------:|
+| Jude Bellingham      | Real Madrid    | MF    | 21-267 | 20.00 |            0.82 |               0.67 |              0.51 |                   0.41 |
+| Brennan Johnson      | Tottenham      | FW    | 23-304 | 19.60 |            0.30 |               0.38 |              0.23 |                   0.34 |
+| Adam Hložek          | Hoffenheim     | FW,MF | 22-241 | 16.50 |            0.39 |               0.39 |              0.11 |                   0.30 |
+| Kevin Schade         | Brentford      | FW    | 23-116 | 17.50 |            0.20 |               0.36 |              0.17 |                   0.29 |
+| Frans Krätzig        | Heidenheim     | MF,FW | 22-068 |  7.00 |            0.43 |               0.42 |              0.42 |                   0.26 |
+| Valentino Livramento | Newcastle Utd  | DF    | 22-131 | 21.60 |            0.48 |               0.46 |              0.42 |                   0.26 |
+| Alessandro Bianco    | Monza          | MF    | 22-173 | 20.70 |            0.48 |               0.43 |              0.41 |                   0.26 |
+| Nnamdi Collins       | Eint Frankfurt | DF    | 21-072 | 12.30 |            0.39 |               0.42 |              0.47 |                   0.26 |
+| Milos Kerkez         | Bournemouth    | DF    | 21-136 | 28.20 |            0.47 |               0.51 |              0.40 |                   0.26 |
+| Adrien Truffert      | Rennes         | DF,MF | 23-123 | 22.60 |            0.43 |               0.47 |              0.51 |                   0.26 |
 
 
-## Top Creators
 
-| Player              | Squad         | Age    | Pos   |
-|:--------------------|:--------------|:-------|:------|
-| Max Aarons          | Bournemouth   | 25-074 | DF    |
-| Max Aarons          | Valencia      | 25-074 | MF    |
-| Rodrigo Abajas      | Valencia      | 21-311 | DF    |
-| James Abankwah      | Udinese       | 21-062 | DF,MF |
-| Keyliane Abdallah   | Marseille     | 18-348 | FW    |
-| Yunis Abdelhamid    | Saint-Étienne | 37-172 | DF    |
-| Himad Abdelli       | Angers        | 25-122 | MF,FW |
-| Mohamed Abdelmoneim | Nice          | 26-046 | DF    |
-| Ali Abdi            | Nice          | 31-089 | DF,MF |
-| Saud Abdulhamid     | Roma          | 25-244 | DF    |
+## Top Overall Progressors
+Players who excel at moving the ball forward through carries, passes, and receiving.
 
 
-## Playmakers
-
-| Player         | Squad       | Age    | Pos   |   playmaker_score |
-|:---------------|:------------|:-------|:------|------------------:|
-| Rareş Ilie     | Nice        | 21-334 | MF    |           6.61808 |
-| Jakub Moder    | Brighton    | 25-346 | MF    |           5.84725 |
-| Carlos Alcaraz | Southampton | 22-109 | MF    |           4.39408 |
-| Mario Maroto   | Valladolid  | 21-111 | MF    |           3.31756 |
-| Walid Cheddira | Napoli      | 27-056 | FW    |           1.79076 |
-| Iker Almena    | Girona      | 20-319 | FW,DF |           1.72007 |
-| Tiago Palacios | Inter       | 21-325 | DF    |           1.69118 |
-| Dane Scarlett  | Tottenham   | 20-360 | FW,MF |           1.62237 |
-| Mohamed Bamba  | Reims       | 20-162 | MF    |           1.5954  |
-| Tommaso Rubino | Fiorentina  | 18-129 | MF    |           1.58828 |
+| Player             | Squad           | Pos   | Age    |   90s | progression_type   |   total_progression_score |
+|:-------------------|:----------------|:------|:-------|------:|:-------------------|--------------------------:|
+| Jeremy Doku        | Manchester City | FW,MF | 22-300 | 12.90 | Carrier            |                      1.35 |
+| Rayan Cherki       | Lyon            | FW,MF | 21-218 | 15.60 | Passer             |                      1.18 |
+| Michael Olise      | Bayern Munich   | FW,MF | 23-101 | 18.40 | Receiver           |                      1.10 |
+| Pedri              | Barcelona       | MF    | 22-118 | 22.40 | Passer             |                      1.08 |
+| Désiré Doué        | Paris S-G       | FW,MF | 19-293 | 14.10 | Receiver           |                      1.04 |
+| Maghnes Akliouche  | Monaco          | FW,MF | 23-026 | 19.90 | Passer             |                      1.02 |
+| Eliesse Ben Seghir | Monaco          | MF,FW | 20-035 | 16.80 | Carrier            |                      1.01 |
+| Florian Wirtz      | Leverkusen      | MF,FW | 21-324 | 20.80 | Receiver           |                      1.01 |
+| Yan Couto          | Dortmund        | DF    | 22-293 |  8.40 | Passer             |                      0.98 |
+| Osame Sahraoui     | Lille           | FW,MF | 23-285 | 12.40 | Receiver           |                      0.97 |
 
 
-## Clinical Forwards
 
-| Player            | Squad           | Age    | Pos   |   efficiency_score |
-|:------------------|:----------------|:-------|:------|-------------------:|
-| Patrik Schick     | Leverkusen      | 29-054 | FW    |           1.18665  |
-| Chris Wood        | Nott'ham Forest | 33-102 | FW    |           1.16545  |
-| Mika Biereth      | Monaco          | 22-039 | FW    |           1.1501   |
-| Ousmane Dembélé   | Paris S-G       | 27-308 | FW    |           1.11701  |
-| Mateo Retegui     | Atalanta        | 25-324 | FW    |           1.05529  |
-| Jonathan Burkardt | Mainz 05        | 24-251 | FW    |           0.984358 |
-| Mohamed Salah     | Liverpool       | 32-277 | FW    |           0.914238 |
-| Myron Boadu       | Bochum          | 24-064 | FW    |           0.910413 |
-| Harry Kane        | Bayern Munich   | 31-234 | FW    |           0.875574 |
-| Oihan Sancet      | Athletic Club   | 24-328 | MF    |           0.874552 |
+## Top Ball Carriers
+Players who excel at progressing the ball through dribbling and carrying.
 
 
-## Progressive Midfielders
-
-| Player         | Squad       | Age    | Pos   |   progression_score |
-|:---------------|:------------|:-------|:------|--------------------:|
-| Ike Orazi      | Reims       | 17-281 | MF    |           inf       |
-| Carlos Alcaraz | Southampton | 22-109 | MF    |             5.47381 |
-| Jakub Moder    | Brighton    | 25-346 | MF    |             4.52638 |
-| Rareş Ilie     | Nice        | 21-334 | MF    |             3.07238 |
-| Tidiam Gomis   | RB Leipzig  | 18-223 | MF    |             2.74379 |
-| Kevin Zeroli   | Milan       | 20-067 | MF    |             2.60236 |
-| Loïc N'Gatta   | Auxerre     | 21-098 | DF    |             2.59632 |
-| Ben Viadere    | Auxerre     | 19-198 | MF    |             2.35484 |
-| Marco Sala     | Lecce       | 25-288 | DF    |             2.24359 |
-| Noah Okafor    | Napoli      | 24-299 | FW,MF |             2.22672 |
+| Player                | Squad           | Pos   | Age    |   90s | progression_type   |   total_progression_score |
+|:----------------------|:----------------|:------|:-------|------:|:-------------------|--------------------------:|
+| Jeremy Doku           | Manchester City | FW,MF | 22-300 | 12.90 | Carrier            |                      1.35 |
+| Sávio                 | Manchester City | FW,MF | 20-347 | 17.40 | Carrier            |                      0.90 |
+| Mamadou Diakhon       | Reims           | FW,MF | 19-182 |  7.00 | Carrier            |                      0.71 |
+| Abdul Fatawu Issahaku | Leicester City  | FW    | 21-015 |  6.40 | Carrier            |                      0.74 |
+| Noni Madueke          | Chelsea         | FW    | 23-013 | 16.10 | Carrier            |                      0.81 |
+| Francisco Conceição   | Juventus        | FW    | 22-099 | 11.40 | Carrier            |                      0.70 |
+| Eliesse Ben Seghir    | Monaco          | MF,FW | 20-035 | 16.80 | Carrier            |                      1.01 |
+| Lamine Yamal          | Barcelona       | FW    | 17-253 | 21.80 | Receiver           |                      0.95 |
+| Jamie Gittens         | Dortmund        | FW,MF | 20-227 | 17.90 | Carrier            |                      0.64 |
+| Abde Ezzalzouli       | Betis           | FW,MF | 23-096 | 17.90 | Carrier            |                      0.75 |
 
 
-## Pressing Midfielders
 
-| Player             | Squad       | Age    | Pos   |   pressing_score |
-|:-------------------|:------------|:-------|:------|-----------------:|
-| Younes Lachaab     | Lille       | 20-072 | MF,FW |         3.95811  |
-| Jacopo Bacci       | Empoli      | 19-273 | MF    |         2.5429   |
-| Cheick Oumar Conde | Venezia     | 24-236 | MF    |         2.11316  |
-| Solly March        | Brighton    | 30-242 | MF,FW |         1.85675  |
-| Bazoumana Touré    | Hoffenheim  | 19-017 | MF,FW |         1.28188  |
-| Jonathan Ikone     | Como        | 26-321 | FW,MF |         1.27657  |
-| Dehmaine Assoumani | Nantes      | 19-336 | MF,FW |         1.10099  |
-| Philip Billing     | Bournemouth | 28-281 | MF    |         1.08315  |
-| Yunus Emre Konak   | Brentford   | 19-068 | FW,MF |         1.06296  |
-| Rareş Ilie         | Nice        | 21-334 | MF    |         0.977778 |
+## Top Progressive Passers
+Players who excel at progressing the ball through passing.
 
 
-## Passing Quality
-
-| Player                 | Squad         |   passing_accuracy_score |   progression_score |   chance_creation_score |   passing_quality_score |
-|:-----------------------|:--------------|-------------------------:|--------------------:|------------------------:|------------------------:|
-| Joshua Kimmich         | Bayern Munich |                    1.073 |               0.313 |                   0.186 |                   0.49  |
-| Jakub Moder            | Brighton      |                    0.818 |               0.002 |                   0.587 |                   0.481 |
-| Michael Olise          | Bayern Munich |                    0.97  |               0.103 |                   0.394 |                   0.479 |
-| Alessandro Bastoni     | Inter         |                    1.064 |               0.254 |                   0.192 |                   0.472 |
-| Angelo Stiller         | Stuttgart     |                    1.048 |               0.257 |                   0.191 |                   0.468 |
-| Pierre Højbjerg        | Marseille     |                    1.106 |               0.262 |                   0.139 |                   0.466 |
-| Trent Alexander-Arnold | Liverpool     |                    0.887 |               0.266 |                   0.285 |                   0.46  |
-| Pedri                  | Barcelona     |                    1.037 |               0.161 |                   0.242 |                   0.456 |
-| Granit Xhaka           | Leverkusen    |                    1.078 |               0.241 |                   0.146 |                   0.454 |
-| Virgil van Dijk        | Liverpool     |                    1.102 |               0.375 |                   0.017 |                   0.45  |
+| Player              | Squad           | Pos   | Age    |   90s | progression_type   |   total_progression_score |
+|:--------------------|:----------------|:------|:-------|------:|:-------------------|--------------------------:|
+| Pedri               | Barcelona       | MF    | 22-118 | 22.40 | Passer             |                      1.08 |
+| Rayan Cherki        | Lyon            | FW,MF | 21-218 | 15.60 | Passer             |                      1.18 |
+| Adam Wharton        | Crystal Palace  | MF    | 20-294 |  9.40 | Passer             |                      0.81 |
+| Angelo Stiller      | Stuttgart       | MF    | 23-353 | 25.30 | Passer             |                      0.81 |
+| Djaoui Cissé        | Rennes          | MF    | 21-051 |  5.40 | Passer             |                      0.76 |
+| Aleksandar Pavlovic | Bayern Munich   | MF    | 20-324 | 11.60 | Passer             |                      0.79 |
+| Joško Gvardiol      | Manchester City | DF    | 23-059 | 27.40 | Passer             |                      0.88 |
+| Tommy Doyle         | Wolves          | MF    | 23-157 |  5.40 | Passer             |                      0.65 |
+| Michael Olise       | Bayern Munich   | FW,MF | 23-101 | 18.40 | Receiver           |                      1.10 |
+| Jude Bellingham     | Real Madrid     | MF    | 21-267 | 20.00 | Passer             |                      0.81 |
 
 
-## Complete Midfielders
 
-| Player             | Squad           | Age    | Pos   |   progression_score |   pressing_score |   playmaker_score |   complete_midfielder_score |
-|:-------------------|:----------------|:-------|:------|--------------------:|-----------------:|------------------:|----------------------------:|
-| Rareş Ilie         | Nice            | 21-334 | MF    |           3.07238   |         0.977778 |         6.61808   |                     4.70162 |
-| Younes Lachaab     | Lille           | 20-072 | MF,FW |           0.980024  |         3.95811  |        -0.0528039 |                     2.11886 |
-| Noah Okafor        | Napoli          | 24-299 | FW,MF |           2.22672   |         0.763889 |         1.10291   |                     1.72566 |
-| Cheick Oumar Conde | Venezia         | 24-236 | MF    |           0.772519  |         2.11316  |         0.818359  |                     1.54673 |
-| Duk                | Leganés         | 25-031 | MF,FW |           1.79228   |         0.928462 |         0.962571  |                     1.53541 |
-| Bazoumana Touré    | Hoffenheim      | 19-017 | MF,FW |           1.47226   |         1.28188  |         0.69499   |                     1.43046 |
-| Noah Okafor        | Napoli          | 24-299 | FW,MF |           2.22672   |         0.763889 |         0.323486  |                     1.37551 |
-| Jacopo Bacci       | Empoli          | 19-273 | MF    |          -0.0213621 |         2.5429   |         0.528727  |                     1.24471 |
-| Jeremy Doku        | Manchester City | 22-296 | FW,MF |           1.91943   |         0.256782 |         0.69106   |                     1.15804 |
-| Dehmaine Assoumani | Nantes          | 19-336 | MF,FW |           0.953024  |         1.10099  |         0.74334   |                     1.12295 |
+## Top Progressive Receivers
+Players who excel at finding space to receive progressive passes.
+
+
+| Player          | Squad           | Pos   | Age    |   90s | progression_type   |   total_progression_score |
+|:----------------|:----------------|:------|:-------|------:|:-------------------|--------------------------:|
+| Jeremy Doku     | Manchester City | FW,MF | 22-300 | 12.90 | Carrier            |                      1.35 |
+| Bradley Barcola | Paris S-G       | FW    | 22-202 | 19.00 | Receiver           |                      0.86 |
+| Michael Olise   | Bayern Munich   | FW,MF | 23-101 | 18.40 | Receiver           |                      1.10 |
+| Bukayo Saka     | Arsenal         | FW,MF | 23-199 | 14.10 | Receiver           |                      0.78 |
+| Lamine Yamal    | Barcelona       | FW    | 17-253 | 21.80 | Receiver           |                      0.95 |
+| Ethan Nwaneri   | Arsenal         | FW,MF | 18-002 |  6.70 | Receiver           |                      0.78 |
+| Sávio           | Manchester City | FW,MF | 20-347 | 17.40 | Carrier            |                      0.90 |
+| Nico Williams   | Athletic Club   | FW    | 22-254 | 19.10 | Receiver           |                      0.75 |
+| Florian Wirtz   | Leverkusen      | MF,FW | 21-324 | 20.80 | Receiver           |                      1.01 |
+| Osame Sahraoui  | Lille           | FW,MF | 23-285 | 12.40 | Receiver           |                      0.97 |
+
+
+
+## Most Versatile Progressors
+Players who can progress the ball effectively in multiple ways.
+
+
+| Player             | Squad           | Pos   | Age    |   90s | progression_type   |   total_progression_score |
+|:-------------------|:----------------|:------|:-------|------:|:-------------------|--------------------------:|
+| Jeremy Doku        | Manchester City | FW,MF | 22-300 | 12.90 | Carrier            |                      1.35 |
+| Rayan Cherki       | Lyon            | FW,MF | 21-218 | 15.60 | Passer             |                      1.18 |
+| Michael Olise      | Bayern Munich   | FW,MF | 23-101 | 18.40 | Receiver           |                      1.10 |
+| Pedri              | Barcelona       | MF    | 22-118 | 22.40 | Passer             |                      1.08 |
+| Désiré Doué        | Paris S-G       | FW,MF | 19-293 | 14.10 | Receiver           |                      1.04 |
+| Maghnes Akliouche  | Monaco          | FW,MF | 23-026 | 19.90 | Passer             |                      1.02 |
+| Eliesse Ben Seghir | Monaco          | MF,FW | 20-035 | 16.80 | Carrier            |                      1.01 |
+| Florian Wirtz      | Leverkusen      | MF,FW | 21-324 | 20.80 | Receiver           |                      1.01 |
+| Yan Couto          | Dortmund        | DF    | 22-293 |  8.40 | Passer             |                      0.98 |
+| Osame Sahraoui     | Lille           | FW,MF | 23-285 | 12.40 | Receiver           |                      0.97 |
+
+
+
+## Highest Expected Possession Impact (xPI)
+Players with the greatest overall impact on their team's possession play.
+
+
+| Player                | Squad           | Pos   | Age    |   90s |   xPI |   position_relative_xPI |
+|:----------------------|:----------------|:------|:-------|------:|------:|------------------------:|
+| Jeremy Doku           | Manchester City | FW,MF | 22-300 | 12.90 |  1.82 |                    2.02 |
+| Lamine Yamal          | Barcelona       | FW    | 17-253 | 21.80 |  1.11 |                    1.15 |
+| Sávio                 | Manchester City | FW,MF | 20-347 | 17.40 |  1.11 |                    1.15 |
+| Mamadou Diakhon       | Reims           | FW,MF | 19-182 |  7.00 |  1.09 |                    1.12 |
+| Abdul Fatawu Issahaku | Leicester City  | FW    | 21-015 |  6.40 |  1.08 |                    1.11 |
+| Francisco Conceição   | Juventus        | FW    | 22-099 | 11.40 |  1.02 |                    1.04 |
+| Jamie Gittens         | Dortmund        | FW,MF | 20-227 | 17.90 |  1.01 |                    1.04 |
+| Florian Wirtz         | Leverkusen      | MF,FW | 21-324 | 20.80 |  1.01 |                    1.04 |
+| Noni Madueke          | Chelsea         | FW    | 23-013 | 16.10 |  0.99 |                    1.00 |
+| Bradley Barcola       | Paris S-G       | FW    | 22-202 | 19.00 |  0.98 |                    1.00 |
+
+
+
+## Midfielder Profile Clusters
+Groups of midfielders with similar statistical profiles.
+
+
+| Player            | Squad           | Pos   | Age    |   90s |   cluster |
+|:------------------|:----------------|:------|:-------|------:|----------:|
+| Karim Adeyemi     | Dortmund        | FW,MF | 23-064 | 11.10 |         1 |
+| Simon Adingra     | Brighton        | FW,MF | 23-081 |  6.90 |         3 |
+| Lucien Agoume     | Sevilla         | MF    | 23-042 | 14.80 |         0 |
+| Ilias Akhomach    | Villarreal      | MF,FW | 20-341 |  6.50 |         1 |
+| Maghnes Akliouche | Monaco          | FW,MF | 23-026 | 19.90 |         4 |
+| Mohamed Ali Cho   | Nice            | FW,MF | 21-063 | 16.10 |         1 |
+| Sergi Altimira    | Betis           | MF    | 23-210 | 17.80 |         0 |
+| Hugo Álvarez      | Celta Vigo      | MF,DF | 21-264 | 15.40 |         4 |
+| Mathis Amougou    | Saint-Étienne   | MF    | 19-064 |  9.50 |         3 |
+| Elliot Anderson   | Nott'ham Forest | MF    | 22-137 | 22.00 |         2 |
+
 

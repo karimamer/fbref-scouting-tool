@@ -1,12 +1,6 @@
-"""
-Main entry point for the soccer analysis application.
-Updated with enhanced shooting analysis capabilities.
-"""
 import argparse
-import logging
-import os
 from datetime import datetime
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Any
 
 import pandas as pd
 
@@ -33,8 +27,7 @@ from src.analysis.advanced.progression import analyze_progressive_actions
 from src.analysis.advanced.possession_impact import get_expected_possession_impact
 from src.analysis.advanced.clustering import cluster_player_profiles, find_undervalued_players
 
-# Import new shooting analysis module
-from src.analysis.shooting_analyzer import (
+from src.analysis.advanced.shooting_analyzer import (
     analyze_shooting_efficiency,
     analyze_shooting_profile,
     identify_shot_creation_specialists,
@@ -48,7 +41,7 @@ from src.utils.visualization import create_dashboard
 
 # Import the new shooting visualizations
 from src.utils.shooting_visualizations import create_shooting_metrics_dashboard
-
+from src.utils.pipeline_helpers import filter_by_age
 # Set up logging
 logger = setup_logging()
 
@@ -56,7 +49,7 @@ logger = setup_logging()
 def analyze_players(
     min_shots: int = DEFAULT_ANALYSIS_PARAMS["min_shots"],
     top_n: int = DEFAULT_ANALYSIS_PARAMS["top_n"],
-    positions: List[str] = None,
+    positions: List[str] = DEFAULT_ANALYSIS_PARAMS["positions"],
     min_90s: int = DEFAULT_ANALYSIS_PARAMS["min_90s"],
     max_age: int = DEFAULT_ANALYSIS_PARAMS["max_age"],
     force_reload: bool = False,
@@ -183,7 +176,7 @@ def analyze_players(
 def run_advanced_analysis(
     min_shots: int = DEFAULT_ANALYSIS_PARAMS["min_shots"],
     top_n: int = DEFAULT_ANALYSIS_PARAMS["top_n"],
-    positions: List[str] = None,
+    positions: List[str] = DEFAULT_ANALYSIS_PARAMS["positions"],
     min_90s: int = DEFAULT_ANALYSIS_PARAMS["min_90s"],
     max_age: int = DEFAULT_ANALYSIS_PARAMS["max_age"],
     force_reload: bool = False,
@@ -242,10 +235,10 @@ def run_advanced_analysis(
 
     # Filter by age
     if max_age is not None:
-        passing_stats = passing_stats[passing_stats["Age"] <= max_age].copy()
-        possession_stats = possession_stats[possession_stats["Age"] <= max_age].copy()
-        defensive_stats = defensive_stats[defensive_stats["Age"] <= max_age].copy()
-        shooting_stats = shooting_stats[shooting_stats["Age"] <= max_age].copy()
+        passing_stats = filter_by_age(passing_stats, max_age)
+        possession_stats = filter_by_age(possession_stats, max_age)
+        defensive_stats = filter_by_age(defensive_stats, max_age)
+        shooting_stats = filter_by_age(shooting_stats, max_age)
 
     results = {}
 
@@ -330,7 +323,7 @@ def run_advanced_analysis(
 def run_shooting_analysis(
     min_shots: int = DEFAULT_ANALYSIS_PARAMS["min_shots"],
     top_n: int = DEFAULT_ANALYSIS_PARAMS["top_n"],
-    positions: List[str] = None,
+    positions: List[str] = DEFAULT_ANALYSIS_PARAMS["positions"],
     min_90s: int = DEFAULT_ANALYSIS_PARAMS["min_90s"],
     max_age: int = DEFAULT_ANALYSIS_PARAMS["max_age"],
     force_reload: bool = False,
@@ -357,13 +350,6 @@ def run_shooting_analysis(
     """
     logger.info("Starting specialized shooting analysis")
     start_time = datetime.now()
-
-    # Use default positions if none provided
-    if positions is None:
-        positions = DEFAULT_ANALYSIS_PARAMS["positions"]
-        # Prioritize forward positions for shooting analysis
-        if any("FW" in pos for pos in positions):
-            positions = [pos for pos in positions if "FW" in pos] + ["FW"]
 
     # Store parameters for logging and metadata
     params = {

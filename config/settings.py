@@ -9,10 +9,10 @@ DATABASE = {
 # Default analysis parameters
 DEFAULT_ANALYSIS_PARAMS = {
     "min_90s": 5,
-    "max_age": 30,
+    "max_age": 23,
     "min_shots": 20,
     "top_n": 20,
-    "positions": ["MF", "FW, MF", "MF,DF"],
+    "positions": ["MF", "MF,DF"],
 }
 
 # Visualization settings

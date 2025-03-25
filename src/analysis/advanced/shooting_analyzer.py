@@ -10,7 +10,6 @@ from src.analysis.metrics import (
     calculate_weighted_score,
     get_score_from_config
 )
-
 logger = logging.getLogger(__name__)
 
 def analyze_shooting_efficiency(
