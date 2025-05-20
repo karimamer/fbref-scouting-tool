@@ -1,6 +1,8 @@
 import os
+import warnings # Added for deprecation warnings
 import pandas as pd
 import numpy as np
+from src.utils.visualization import plot_radar_chart
 import matplotlib.pyplot as plt
 import seaborn as sns
 from typing import Dict, List, Optional, Tuple, Union
@@ -161,7 +163,8 @@ def create_shooting_profile_radar(
     min_90s: float = 5
 ) -> plt.Figure:
     """
-    Create a radar chart comparing shooting profiles of selected players.
+    DEPRECATED: Create a radar chart comparing shooting profiles of selected players.
+    Use plot_radar_chart from src.utils.visualization for a more general and updated solution.
 
     Args:
         df: DataFrame with shooting statistics
@@ -172,6 +175,12 @@ def create_shooting_profile_radar(
     Returns:
         matplotlib Figure object
     """
+    warnings.warn(
+        "create_shooting_profile_radar is deprecated and will be removed in a future version. "
+        "Use plot_radar_chart from src.utils.visualization instead.",
+        FutureWarning,
+        stacklevel=2 # Points the warning to the caller of this function
+    )
     # Filter data for selected players and minimum minutes
     plot_df = df[(df["Player"].isin(players)) & (df["90s"] >= min_90s)].copy()
 
@@ -372,18 +381,100 @@ def create_shooting_metrics_dashboard(
 
     # 4. Radar comparison of top scorers
     try:
-        # Get top 5 goal scorers
-        top_scorers = shooting_df.sort_values("Gls", ascending=False).head(5)["Player"].tolist()
+        top_scorers_names = shooting_df.sort_values("Gls", ascending=False).head(5)["Player"].tolist()
 
-        if len(top_scorers) >= 3:  # Need at least 3 players for a meaningful radar
-            output_file = os.path.join(output_dir, "top_scorers_radar.png")
-            create_shooting_profile_radar(
-                shooting_df,
-                players=top_scorers[:5],  # Limit to 5 players
-                output_file=output_file,
-                min_90s=min_90s
-            )
-            created_files.append(output_file)
+        if len(top_scorers_names) < 3: # Original check: Need at least 3 players for a meaningful radar
+            print(f"Not enough top scorers ({len(top_scorers_names)}) to generate a meaningful radar chart. Skipping.")
+        else:
+            # Filter the DataFrame for the selected players and minimum 90s played
+            plot_df = shooting_df[
+                (shooting_df["Player"].isin(top_scorers_names)) &
+                (shooting_df["90s"] >= min_90s)
+            ].copy() # Use .copy() to avoid SettingWithCopyWarning
+
+            if plot_df.empty:
+                print(f"No players found matching criteria for shooting radar chart (top scorers list: {top_scorers_names}, min_90s={min_90s}). Skipping.")
+            # Check if enough unique players remain after filtering. plot_radar_chart needs at least one.
+            elif len(plot_df["Player"].unique()) < 1: 
+                print(f"Not enough unique players ({len(plot_df['Player'].unique())}) after min_90s filter for shooting radar. Skipping.")
+            else:
+                # Define the metrics for the radar chart.
+                metric_columns = ["Sh/90", "SoT%", "G/Sh", "Dist", "npxG/Sh", "G-xG"]
+                
+                # Calculate missing metrics if they are not already in the DataFrame.
+                # This includes handling potential division by zero.
+                if "90s" in plot_df.columns and "Sh" in plot_df.columns:
+                    if "Sh/90" not in plot_df.columns:
+                        plot_df["Sh/90"] = np.nan # Initialize column
+                        # Calculate Sh/90 only for rows where 90s > small epsilon to avoid division by zero/very small numbers
+                        valid_90s_mask = plot_df["90s"] > 1e-6 
+                        plot_df.loc[valid_90s_mask, "Sh/90"] = plot_df.loc[valid_90s_mask, "Sh"] / plot_df.loc[valid_90s_mask, "90s"]
+                
+                if "Sh" in plot_df.columns:
+                    if "G/Sh" not in plot_df.columns and "Gls" in plot_df.columns:
+                        plot_df["G/Sh"] = np.nan # Initialize column
+                        valid_sh_mask = plot_df["Sh"] > 0 # Shots must be positive integer
+                        plot_df.loc[valid_sh_mask, "G/Sh"] = plot_df.loc[valid_sh_mask, "Gls"] / plot_df.loc[valid_sh_mask, "Sh"]
+                    
+                    if "npxG/Sh" not in plot_df.columns and "npxG" in plot_df.columns:
+                        plot_df["npxG/Sh"] = np.nan # Initialize column
+                        valid_sh_mask = plot_df["Sh"] > 0
+                        plot_df.loc[valid_sh_mask, "npxG/Sh"] = plot_df.loc[valid_sh_mask, "npxG"] / plot_df.loc[valid_sh_mask, "Sh"]
+
+                if "G-xG" not in plot_df.columns and "Gls" in plot_df.columns and "xG" in plot_df.columns:
+                    plot_df["G-xG"] = plot_df["Gls"] - plot_df["xG"]
+
+                # Filter out metrics that are not in plot_df or are all NaN after calculation.
+                # These are the metrics that will actually be plotted.
+                available_metrics = [
+                    m for m in metric_columns 
+                    if m in plot_df.columns and plot_df[m].notna().any()
+                ]
+
+                if len(available_metrics) < 3:
+                    print(f"Not enough available and valid metrics ({len(available_metrics)}) for shooting radar chart. Need at least 3. Available: {available_metrics}. Skipping.")
+                else:
+                    # Drop rows that have NaN for any of the available_metrics to be plotted.
+                    # This ensures that each player passed to plot_radar_chart has data for all axes.
+                    final_plot_df = plot_df.dropna(subset=available_metrics).copy() 
+                    
+                    # Get the list of player names from the filtered and NaN-dropped DataFrame.
+                    entity_names_list = final_plot_df["Player"].unique().tolist() # Use unique() to be safe.
+                    
+                    if final_plot_df.empty or not entity_names_list:
+                         print(f"No players remaining with complete data for available metrics ({available_metrics}) after NaN drop. Skipping radar chart.")
+                    elif len(entity_names_list) < 1: # Double check, though covered by plot_df.empty and unique list check
+                         print(f"Not enough players ({len(entity_names_list)}) for radar chart after processing NaNs. Skipping.")
+                    else:
+                        # Prepare data for plot_radar_chart:
+                        # 1. Create a list of single-row DataFrames, one for each player.
+                        # 2. Create a list of player names corresponding to these DataFrames.
+                        data_frames_list = []
+                        for player_name in entity_names_list: # Iterate based on unique players in final_plot_df
+                            player_specific_data = final_plot_df[final_plot_df["Player"] == player_name]
+                            # Ensure we take only the first row if somehow duplicates exist (should not with unique names)
+                            # And ensure columns are in the correct 'available_metrics' order.
+                            player_data_df = pd.DataFrame(player_specific_data[available_metrics].iloc[[0]].values, columns=available_metrics)
+                            data_frames_list.append(player_data_df)
+                        
+                        if not data_frames_list: # Should be caught by earlier checks on entity_names_list
+                             print(f"Dataframe list for radar chart is empty despite having entity names. Skipping.")
+                        else:
+                            output_file = os.path.join(output_dir, "top_scorers_radar.png")
+                            # Define normalization specifications, e.g., 'Dist' where lower is better.
+                            normalization_specs = {'Dist': 'inverted'} 
+
+                            # Call the generic radar chart plotting function.
+                            plot_radar_chart(
+                                data_frames=data_frames_list,
+                                metric_columns=available_metrics, # Use the validated list of metrics
+                                entity_names=entity_names_list,
+                                title="Shooting Profile Comparison", # Hardcoded title from old function
+                                normalize=True, # plot_radar_chart defaults to True, this is for clarity
+                                normalization_specs=normalization_specs,
+                                output_file=output_file
+                            )
+                            created_files.append(output_file)
     except Exception as e:
         print(f"Error creating shooting profile radar: {str(e)}")
 
