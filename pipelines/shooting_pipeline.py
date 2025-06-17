@@ -12,7 +12,7 @@ from src.analysis.basic.forwards import find_clinical_forwards
 from src.analysis.basic.midfielders import find_complete_midfielders
 
 # Import the new shooting analysis functions
-from src.analysis.shooting_analyzer import (
+from src.analysis.advanced.shooting_analyzer import (
     analyze_shooting_efficiency,
     analyze_shooting_profile,
     identify_shot_creation_specialists,

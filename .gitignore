@@ -15,3 +15,4 @@ scouting.db
 
 # linting file
 .ruff_cache
+.claude/
