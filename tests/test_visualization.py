@@ -21,7 +21,7 @@ def _create_sample_radar_data(num_entities=2, num_metrics=3, custom_metrics=None
     if custom_metrics:
         metric_columns = custom_metrics
         if custom_values and isinstance(custom_values[0], dict): # if values are dicts, num_metrics is from keys
-             num_metrics = len(custom_values[0].keys())
+            num_metrics = len(custom_values[0].keys())
         else: # if values are lists, num_metrics is from length of list
             num_metrics = len(custom_metrics)
 
