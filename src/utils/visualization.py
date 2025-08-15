@@ -391,7 +391,6 @@ def create_dashboard(
                     entity_names=entity_names_list,
                     title="Top Players by Versatility", # Same title as before
                     output_file=output_file
-                    # normalize=True is the default in plot_radar_chart.
                     # create_radar_comparison also defaulted to normalize=True.
                 )
                 created_files.append(output_file)
