@@ -238,7 +238,7 @@ class TestPlotRadarChart(unittest.TestCase):
         plt.close('all') # Ensure any partial fig is closed
 
         # DataFrame with more than one row
-        df_multi_row = pd.concat([data_frames[0], data_frames[0]], ignore_index=True) # Changed from append to concat
+        df_multi_row = pd.concat([data_frames[0], data_frames[0]], ignore_index=True)
         multi_row_dfs = [df_multi_row] + data_frames[1:]
         with self.assertRaisesRegex(ValueError, f"DataFrame for entity '{entity_names[0]}' must have exactly one row."):
             plot_radar_chart(
